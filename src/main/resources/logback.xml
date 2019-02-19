@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration scan="true" scanPeriod="5 seconds" debug="false">
+    <property name="LOG_DIR" value="${user.home}/amf/logs" />
+    <property name="LOG_FILE" value="${amf.log.filename}" />
+
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %5level [%-26logger{0}:%-3line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${LOG_FILE}</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+                <maxHistory>60</maxHistory>
+                <totalSizeCap>1GB</totalSizeCap>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %5level [%-26logger{0}:%-3line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="asyncConsoleAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10000</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="stdout" />
+    </appender>
+
+    <appender name="asyncFileAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <level value="DEBUG" />
+        <appender-ref ref="ROLLING" />
+    </appender>
+
+    <logger name="file" additivity="false" >
+        <level value="DEBUG"/>
+        <appender-ref ref="asyncFileAppender"/>
+    </logger>
+
+    <root level="DEBUG">
+        <appender-ref ref="asyncConsoleAppender"/>
+        <appender-ref ref="asyncFileAppender" />
+    </root>
+</configuration>
