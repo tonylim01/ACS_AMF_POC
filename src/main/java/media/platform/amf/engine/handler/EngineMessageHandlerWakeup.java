@@ -1,10 +1,13 @@
 package media.platform.amf.engine.handler;
 
+import media.platform.amf.AppInstance;
 import media.platform.amf.common.AppId;
 import media.platform.amf.engine.types.EngineMessageType;
 import media.platform.amf.engine.types.EngineReportMessage;
 import media.platform.amf.engine.types.EngineResponseMessage;
 import media.platform.amf.oam.StatManager;
+import media.platform.amf.redundant.RedundantClient;
+import media.platform.amf.redundant.RedundantMessage;
 import media.platform.amf.rmqif.handler.RmqProcAiServiceReq;
 import media.platform.amf.rmqif.handler.RmqProcWakeupStatusRes;
 import media.platform.amf.rmqif.types.RmqMessageType;
@@ -178,16 +181,16 @@ public class EngineMessageHandlerWakeup extends BaseEngineMessageHandler {
             return;
         }
 
+        SessionInfo sessionInfo = SessionManager.getInstance().getSession(sessionId);
+        if (sessionInfo == null) {
+            logger.warn("Cannot find session for appId=[{}]", msg.getHeader().getAppId());
+            return;
+        }
+
         if (compareString(msg.getHeader().getEvent(), EngineMessageType.MSG_EVENT_DETECTED)) {
             // Success
             if (msg.getHeader().getAppId() == null) {
                 logger.warn("Null appId in response message");
-                return;
-            }
-
-            SessionInfo sessionInfo = SessionManager.getInstance().getSession(sessionId);
-            if (sessionInfo == null) {
-                logger.warn("Cannot find session for appId=[{}]", msg.getHeader().getAppId());
                 return;
             }
 
@@ -210,6 +213,10 @@ public class EngineMessageHandlerWakeup extends BaseEngineMessageHandler {
         }
         else {
             logger.warn("Undefined event [{}]", msg.getHeader().getEvent());
+        }
+
+        if (AppInstance.getInstance().getUserConfig().getRedundantConfig().isActive()) {
+            RedundantClient.getInstance().sendMessageSimple(RedundantMessage.RMT_SN_WAKEUP_START_REPORT, sessionInfo.getSessionId());
         }
 
     }

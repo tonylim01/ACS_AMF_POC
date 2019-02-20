@@ -113,12 +113,15 @@ public class RmqProcAiServiceRes extends RmqIncomingMessageHandler {
                 sessionInfo.getEngineId(), sessionInfo.getEngineToolId(),
                 res.getIp(), res.getPort());
 
+        /*  20190220 not to sync this msg
+
         if (AppInstance.getInstance().getUserConfig().getRedundantConfig().isActive()) {
             String json = new JsonMessage(SessionInfo.class).build(sessionInfo);
             logger.debug("[{}] JSON: {}", msg.getSessionId(), json);
 
             RedundantClient.getInstance().sendMessage(RedundantMessage.RMT_SN_AI_SERVICE_RES, json);
         }
+         */
 
         return false;
     }

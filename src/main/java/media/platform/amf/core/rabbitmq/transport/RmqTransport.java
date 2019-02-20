@@ -95,6 +95,8 @@ public class RmqTransport {
         factory.setUsername(userName);
         factory.setPassword(password);
         factory.setRequestedHeartbeat(1);
+        factory.setAutomaticRecoveryEnabled(true);
+        factory.setNetworkRecoveryInterval(2000);
 
         try {
             connection = factory.newConnection();

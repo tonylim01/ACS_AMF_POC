@@ -107,6 +107,10 @@ public class RedundantConsumer implements Runnable {
                 RedunProcLoginRes loginRes = new RedunProcLoginRes();
                 loginRes.handle(body);
                 break;
+            case RedundantMessage.RMT_SN_WAKEUP_START_REPORT:
+                RedunProcWakeupStartRpt wakeupStartRpt = new RedunProcWakeupStartRpt();
+                wakeupStartRpt.handle(body);
+                break;
 
             default:
                 break;

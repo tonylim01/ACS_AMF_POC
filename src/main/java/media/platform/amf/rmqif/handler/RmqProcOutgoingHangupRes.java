@@ -38,7 +38,7 @@ public class RmqProcOutgoingHangupRes extends RmqIncomingMessageHandler {
             return false;
         }
 
-        ServiceManager.getInstance().releaseResource(msg.getSessionId());
+//        ServiceManager.getInstance().releaseResource(msg.getSessionId());
 
         SessionStateManager.getInstance().setState(msg.getSessionId(), SessionState.IDLE);
 

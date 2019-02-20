@@ -17,5 +17,6 @@ public class RedundantMessage {
     public static final int RMT_SN_WAKEUP_STATUS_REQ = 9;
     public static final int RMT_SN_AI_SERVICE_RES = 10;
     public static final int RMT_SN_AI_SERVICE_CANCEL_REQ = 11;
+    public static final int RMT_SN_WAKEUP_START_REPORT = 12;
 
 }

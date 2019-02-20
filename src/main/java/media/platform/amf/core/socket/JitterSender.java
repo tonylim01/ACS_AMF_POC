@@ -239,7 +239,7 @@ public class JitterSender {
 
                 // For debugging. What makes the delay?
                 if ((buffer.size() - beforeRemaining > 5) || (delay <= 0) || (delay >= 50)) {
-                    logger.debug("-> tick {} remaining {} delay {}", tick, buffer.size(), delay);
+//                    logger.debug("-> tick {} remaining {} delay {}", tick, buffer.size(), delay);
                     --delay;
                 }
 
@@ -256,7 +256,7 @@ public class JitterSender {
 
                 if (buffer.size() > 10) {
                     int n = buffer.size() - 10;
-                    logger.warn("Trash [{}] packets", n);
+                    logger.info("Trash [{}] packets", n);
                     for (int i = 0; i < n; i++) {
                         synchronized (buffer) {
                             UdpPacket trash = buffer.get(0);

@@ -125,7 +125,9 @@ public class EngineMessageHandlerTool extends BaseEngineMessageHandler {
 
         if (toolStatusRpt != null) {
             if ((count > 0) && engineClient.isReset()) {
-                engineClient.setReset(false);
+                if (count < 64) {
+                    engineClient.setReset(false);
+                }
 
                 Integer[] active = toolStatusRpt.getActive();
                 if (active != null) {
